@@ -1,4 +1,5 @@
 using Customers.Api.Extensions;
+using Customers.Api.Extensions.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+var mapGroup = app.MapGroup("v1");
+mapGroup.AddCustomerRoutes();
 
 app.MapGet("/customer", () =>
 {

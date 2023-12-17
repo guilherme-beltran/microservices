@@ -4,7 +4,7 @@ namespace Customers.Api.Core.Customers;
 
 public sealed class Customer : Entity
 {
-    public Customer() { }
+    private Customer() { }
     private Customer(string name, string email)
     {
         Name = name;
