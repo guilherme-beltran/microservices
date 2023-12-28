@@ -1,7 +1,7 @@
 ﻿using Flunt.Notifications;
 using System.Net;
 
-namespace Customers.Api.Core.Customers;
+namespace Customers.Api.Core.Shared;
 
 public sealed record Error(string? Key = null, HttpStatusCode? StatusCode = null, string? Message = null, IReadOnlyCollection<Notification>? Notifications = null)
 {

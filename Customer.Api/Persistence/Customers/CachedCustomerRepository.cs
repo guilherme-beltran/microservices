@@ -1,7 +1,6 @@
 ﻿using Customers.Api.Core.Customers;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-using System.Threading;
 
 namespace Customers.Api.Persistence.Customers;
 
@@ -32,9 +31,15 @@ internal sealed class CachedCustomerRepository : ICachedCustomerRepository
                 return customers;
             }
 
+            var cacheEntryOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4)
+            };
+
             await _distributedCache.SetStringAsync(
                 key,
                 JsonConvert.SerializeObject(customers),
+                cacheEntryOptions,
                 cancellationToken);
 
             return customers;
@@ -50,7 +55,7 @@ internal sealed class CachedCustomerRepository : ICachedCustomerRepository
         return customers;
     }
 
-    public async Task<Customer> GetByIdAsync(long id, CancellationToken cancellationToken)
+    public async Task<Customer> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         string key = $"customer-{id}";
 
@@ -66,9 +71,15 @@ internal sealed class CachedCustomerRepository : ICachedCustomerRepository
                 return customer;
             }
 
+            var cacheEntryOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4)
+            };
+
             await _distributedCache.SetStringAsync(
                 key, 
-                JsonConvert.SerializeObject(customer), 
+                JsonConvert.SerializeObject(customer),
+                cacheEntryOptions,
                 cancellationToken);
 
             return customer;
@@ -84,4 +95,23 @@ internal sealed class CachedCustomerRepository : ICachedCustomerRepository
         return customer;
     }
 
+    public async Task Insert(Customer customer, CancellationToken cancellationToken)
+    {
+        string key = $"customer-{customer.Id}";
+
+        var cacheEntryOptions = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(4)
+        };
+
+        await Task.WhenAll(
+            _decorated.Insert(customer, cancellationToken),
+
+            _distributedCache.SetStringAsync(
+            key,
+            JsonConvert.SerializeObject(customer),
+            cacheEntryOptions,
+            cancellationToken)
+            );
+    }
 }

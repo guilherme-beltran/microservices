@@ -14,14 +14,16 @@ internal sealed class CustomerRepository : ICustomerRepository
     }
 
     public async Task<IEnumerable<Customer>> GetAllAsync(CancellationToken cancellationToken) 
-        => await _context.Customers.ToListAsync();
-
-    public async Task<Customer> GetByIdAsync(long id, CancellationToken cancellationToken) 
         => await _context
                 .Customers
-                .Where(c => c.CustomerId == id)
+                .ToListAsync(cancellationToken);
+
+    public async Task<Customer> GetByIdAsync(Guid id, CancellationToken cancellationToken) 
+        => await _context
+                .Customers
+                .Where(c => c.Id == id)
                 .FirstOrDefaultAsync();
 
     public async Task Insert(Customer customer, CancellationToken cancellationToken) 
-        => await _context.AddAsync(customer, cancellationToken);
+        => await _context.Customers.AddAsync(customer, cancellationToken);
 }

@@ -1,7 +1,7 @@
 ﻿using Flunt.Notifications;
 using System.Net;
 
-namespace Customers.Api.Core.Customers;
+namespace Customers.Api.Core.Shared;
 
 public class Response
 {

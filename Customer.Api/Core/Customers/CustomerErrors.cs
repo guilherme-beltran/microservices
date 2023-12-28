@@ -1,4 +1,5 @@
-﻿using Flunt.Notifications;
+﻿using Customers.Api.Core.Shared;
+using Flunt.Notifications;
 using System.Net;
 
 namespace Customers.Api.Core.Customers;
@@ -20,4 +21,7 @@ public static class CustomerErrors
 
     public static Error Exception(string key, string message)
        => new(key, HttpStatusCode.InternalServerError, message);
+
+    public static Error Failure(string key, string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+       => new(key, statusCode, message);
 }

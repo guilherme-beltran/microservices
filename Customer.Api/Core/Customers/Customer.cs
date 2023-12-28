@@ -10,16 +10,14 @@ public sealed class Customer : Entity
         Name = name;
         Email = email;
     }
-
-    public long CustomerId { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
 
-    public Customer Create(string name, string email)
+    public static Customer Create(string name, string email)
     {
         Customer customer = new(name: name, email: email);
 
-        RaiseDomainEvent(new CreateCustomerEvent(Name: customer.Name, CreatedAt: DateTime.UtcNow));
+        customer.RaiseDomainEvent(new CreateCustomerEvent(Id: customer.Id, Name: customer.Name, CreatedAt: DateTime.Now));
 
         return customer;
     }

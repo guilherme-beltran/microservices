@@ -10,10 +10,9 @@ public class CustomerMap : IEntityTypeConfiguration<Customer>
     {
         builder.ToTable("Customer");
 
-        builder.Ignore(x => x.Id);
         builder.Ignore(x => x.IsValid);
 
-        builder.HasKey(x => x.CustomerId);
+        builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name)
                .HasColumnName("Name")
