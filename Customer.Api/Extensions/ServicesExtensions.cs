@@ -1,6 +1,7 @@
 ﻿using Customers.Api.Core.Customers.Commands.Create;
 using Customers.Api.Core.Data;
 using Customers.Api.Core.EventBus;
+using Customers.Api.Core.Events;
 using Customers.Api.Core.MessageBroker;
 using Customers.Api.Persistence.Customers;
 using Customers.Api.Persistence.UnitOfWork;
@@ -53,6 +54,8 @@ public static class ServicesExtensions
         {
             busConfigurator.SetKebabCaseEndpointNameFormatter();
 
+            busConfigurator.AddConsumer<CustomerCreatedEventConsumer>();
+
             busConfigurator.UsingRabbitMq((context, configurator) =>
             {
                 MessageBrokerSettings settings = context.GetRequiredService<MessageBrokerSettings>();
@@ -61,6 +64,11 @@ public static class ServicesExtensions
                 {
                     host.Username(settings.Username);
                     host.Password(settings.Password);
+                });
+
+                configurator.ReceiveEndpoint("customer-created-queue", e =>
+                {
+                    e.ConfigureConsumer<CustomerCreatedEventConsumer>(context);
                 });
             });
         });
