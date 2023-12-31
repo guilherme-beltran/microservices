@@ -1,8 +1,7 @@
-﻿using Azure.Core;
+﻿using Customers.Api.Core.EventBus;
 using Customers.Api.Core.Shared;
 using Customers.Api.Persistence.Customers;
 using Customers.Api.Persistence.UnitOfWork;
-using MediatR;
 
 namespace Customers.Api.Core.Customers.Commands.Create;
 
@@ -10,11 +9,13 @@ public class CreateCustomerHandler : ICreateCustomerHandler
 {
     private readonly ICachedCustomerRepository _cachedRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IEventBus _eventBus;
 
-    public CreateCustomerHandler(ICachedCustomerRepository cachedRepository, IUnitOfWork unitOfWork)
+    public CreateCustomerHandler(ICachedCustomerRepository cachedRepository, IUnitOfWork unitOfWork, IEventBus eventBus)
     {
         _cachedRepository = cachedRepository;
         _unitOfWork = unitOfWork;
+        _eventBus = eventBus;
     }
 
     public async Task<Response> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
@@ -57,7 +58,11 @@ public class CreateCustomerHandler : ICreateCustomerHandler
                 return CustomerErrors.Failure("CreateCustomerHandler.Commit", "We had an internal failure when saving the data. Please try again later.");
             }
 
-            return Response.Sucess($"Custome successfully created.");
+            var @event = new CustomerCreatedEvent(Id: Guid.NewGuid(), Name: customer.Name, Email: customer.Email, CreatedAt: DateTime.Now);
+
+            await _eventBus.PublishAsync(@event, cancellationToken);
+
+            return Response.Sucess($"Customer has been created with success.");
 
         }
         catch (Exception ex)

@@ -24,11 +24,5 @@ app.UseHttpsRedirection();
 var mapGroup = app.MapGroup("v1");
 mapGroup.AddCustomerRoutes();
 
-app.MapGet("/customer", () =>
-{
-    return "Customer Api on";
-})
-.WithName("online")
-.WithOpenApi();
 
 app.Run();

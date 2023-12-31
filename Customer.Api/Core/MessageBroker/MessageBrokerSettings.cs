@@ -1,4 +1,4 @@
-﻿namespace Customers.Api.Persistence.Services;
+﻿namespace Customers.Api.Core.MessageBroker;
 
 public sealed class MessageBrokerSettings
 {

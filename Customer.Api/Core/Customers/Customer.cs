@@ -18,7 +18,7 @@ public sealed class Customer : Entity
     {
         Customer customer = new(name: name, email: email);
 
-        customer.RaiseDomainEvent(new CreateCustomerEvent(Id: customer.Id, Name: customer.Name, CreatedAt: DateTime.Now));
+        //customer.RaiseDomainEvent(new CreateCustomerEvent(Id: customer.Id, Name: customer.Name, CreatedAt: DateTime.Now));
 
         return customer;
     }
