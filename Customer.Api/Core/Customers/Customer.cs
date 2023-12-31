@@ -1,4 +1,5 @@
 ﻿using Customers.Api.Core.Events;
+using Customers.Api.Core.Shared;
 
 namespace Customers.Api.Core.Customers;
 

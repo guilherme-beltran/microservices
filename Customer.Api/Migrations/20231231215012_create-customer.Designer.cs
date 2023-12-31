@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Customers.Api.Migrations
 {
     [DbContext(typeof(CustomerContext))]
-    [Migration("20231228235137_Update_Id_type")]
-    partial class Update_Id_type
+    [Migration("20231231215012_create-customer")]
+    partial class createcustomer
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

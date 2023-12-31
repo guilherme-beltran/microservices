@@ -1,7 +1,7 @@
 ﻿using Customers.Api.Core.Events;
 using Flunt.Notifications;
 
-namespace Customers.Api.Core.Customers;
+namespace Customers.Api.Core.Shared;
 
 public abstract class Entity : Notifiable<Notification>
 {
